@@ -71,11 +71,10 @@ function getIngestProfile(profile_id) {
 	return requestHelper(`${config.base_url_ingestion}/profiles${profile_id}`, 'GET');
 }
 
-function retranscodeVideo(video_id) {
+function retranscodeVideo(video_id, profile) {
 	const body = {
     "master": { "use_archived_master": true },
-    "profile": "videocloud-mkc_watermark",
-    "callbacks": ["http://[2600:100f:b017:dc70:78f2:356b:5173:6160]/ingest-notifications"]
+    "profile": profile
 	}
 	return requestHelper(`${config.base_url_dynamic_ingest}/${video_id}/ingest-requests`, 'POST', body);
 }
@@ -94,8 +93,8 @@ BrightcoveAPI.prototype = {
 			return getIngestProfile(profile_id);
 		},
 
-		retranscodeVideo: function(video_id) {
-			return retranscodeVideo(video_id);
+		retranscodeVideo: function(video_id, profile) {
+			return retranscodeVideo(video_id, profile);
 		}
     
 }
