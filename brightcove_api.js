@@ -80,8 +80,8 @@ function retranscodeVideo(video_id) {
 	return requestHelper(`${config.base_url_dynamic_ingest}/${video_id}/ingest-requests`, 'POST', body);
 }
 
-var BrightcoveAPI = function (user, pass) {
-	
+var BrightcoveAPI = function () {
+
 };
 
 BrightcoveAPI.prototype = {
