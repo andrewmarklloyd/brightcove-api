@@ -1,15 +1,7 @@
 
-
 const config = require('./config.json');
 const request = require('request');
 const fs = require('fs');
-
-const bearerInfo = {
-		auth: {
-			bearer: JSON.parse(fs.readFileSync('auth_token.json')).access_token,
-			'Content-Type': 'application/json'
-		}
-};
 
 function requestNewAuthToken() {
 	const auth_string = new Buffer(config.client_id + ":" + config.client_secret).toString('base64');
@@ -28,7 +20,6 @@ function requestNewAuthToken() {
 	    if (err) {
 	        reject(err);
 	    } else {
-	        fs.writeFileSync('auth_token.json', body);
 	        resolve(JSON.parse(body).access_token);
 	    } 
 		});	
@@ -37,19 +28,20 @@ function requestNewAuthToken() {
 
 function requestHelper(url, method, json) {
 	var func;
-	var options;
+	var options = {url: url, auth: {'Content-Type': 'application/json'}};
 	switch (method) {
 		case 'GET':
 			func = request.get;
-			options = {url: url, auth: bearerInfo.auth};
 			break;
 		case 'PUT':
 			func = request.put;
-			options = {url: url, auth: bearerInfo.auth, body: json, json: true};
+			options.body = json;
+			options.json = true;
 			break;
 		case 'POST':
 			func = request.post;
-			options = {url: url, auth: bearerInfo.auth, body: json, json: true};
+			options.body = json;
+			options.json = true;
 			break;
 	}
 	const promise = new Promise((resolve, reject) => {
@@ -57,6 +49,7 @@ function requestHelper(url, method, json) {
 				return auth_token;
 		}).then(function(auth_token){
 			options.auth.bearer = auth_token;
+
 			func(options, function(err, resp, body) {
 		  	if (err) {
 		    	reject(err);
@@ -80,7 +73,7 @@ function getIngestProfile(profile_id) {
 	profile_id = profile_id ? `/${profile_id}` : '';
 	requestHelper(`${config.base_url_ingestion}/profiles${profile_id}`, 'GET')
 		.then(body => {
-			console.log(JSON.stringify(body, null, 2));
+			console.log(body);
 		});
 }
 
@@ -106,12 +99,12 @@ If you are ingesting files in batches, limit batches to 100 and wait for the pre
 
 
 function getMkcVideosHelper() {
-	const data = require('./mkc.json');
+	//const data = require('./mkc.json');
 	searchVideosByTag('mkc', 0, function(videos){
-			videos.forEach(function(item){
+			/*videos.forEach(function(item){
 				data.push(item);
-			});
-			console.log(data);
+			});*/
+			console.log(videos);
 			//fs.writeFileSync('mkc.json', JSON.stringify(data, null, 2));
 			//console.log(require('./mkc.json').length);
 		});
