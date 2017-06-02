@@ -71,10 +71,13 @@ function getIngestProfile(profile_id) {
 	return requestHelper(`${config.base_url_ingestion}/profiles${profile_id}`, 'GET');
 }
 
-function retranscodeVideo(video_id, profile) {
+function retranscodeVideo(video_id, profile, callbacks) {
 	const body = {
     "master": { "use_archived_master": true },
     "profile": profile
+	}
+	if (callbacks) {
+		body.callbacks = callbacks;
 	}
 	return requestHelper(`${config.base_url_dynamic_ingest}/${video_id}/ingest-requests`, 'POST', body);
 }
