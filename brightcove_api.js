@@ -96,8 +96,8 @@ BrightcoveAPI.prototype = {
 			return getIngestProfile(profile_id);
 		},
 
-		retranscodeVideo: function(video_id, profile) {
-			return retranscodeVideo(video_id, profile);
+		retranscodeVideo: function(video_id, profile, callbacks) {
+			return retranscodeVideo(video_id, profile, callbacks);
 		}
     
 }
