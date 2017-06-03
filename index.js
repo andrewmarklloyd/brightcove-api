@@ -84,6 +84,7 @@ function initializeJobFinishedListener() {
 			console.log('Job', jobId, 'finished')
 			runningJobs.splice(index, 1)
 		} else {
+			console.log('RECEIVED NOTIFICATION OF UNKNOWN JOB')
 			log_if.logErrorMessage({date: new Date(), jobId: jobId, errorMessage: 'RECEIVED NOTIFICATION OF UNKNOWN JOB'})
 		}
 	})
